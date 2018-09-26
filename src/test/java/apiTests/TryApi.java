@@ -190,7 +190,7 @@ public class TryApi {
                 when().
                 delete("/rest/api/2/issue/" + issueId).
                 then().
-                statusCode(204).log().all(); //Code 204: Returned if the issue was successfully removed.
+                statusCode(204).log().all();
     }
 
 

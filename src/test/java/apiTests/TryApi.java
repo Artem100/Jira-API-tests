@@ -5,6 +5,7 @@ import io.restassured.response.ValidatableResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
@@ -112,7 +113,7 @@ public class TryApi {
 
     }
 
-    @Test
+    @Test(dependsOnMethods = {"createIssue"})
     public void addComment(){
         JSONObject issueComment = new JSONObject();
 
@@ -123,8 +124,8 @@ public class TryApi {
                 header("Cookie", "JSESSIONID=" + sessionId).
                 body(issueComment.toString()).
                 when().
-                //post("/rest/api/2/issue/"+issueId+"/comment").
-                post("/rest/api/2/issue/34249/comment").
+                post("/rest/api/2/issue/"+issueId+"/comment").
+                //post("/rest/api/2/issue/34249/comment").
                 then().
                 statusCode(201);
 
@@ -132,16 +133,16 @@ public class TryApi {
         Assert.assertEquals(response.extract().path("body"),"Added comment use to API");
     }
 
-    @Test
+    @Test(dependsOnMethods = {"createIssue"})
     public void infoIssue(){
         ValidatableResponse response = given().
                 header("Content-Type", "application/json").
                 header("Cookie", "JSESSIONID=" + sessionId).
                 when().
-                get("/rest/api/2/issue/34249").then().statusCode(200).log().all();
+                get("/rest/api/2/issue/34249").then().statusCode(200);
     }
 
-    @Test
+    @Test(dependsOnMethods = {"createIssue"})
     public void updatePriority(){
         //{"update":{"priority":[{"set":{"id":1}}]}}
         JSONObject changePriority = new JSONObject();
@@ -161,12 +162,37 @@ public class TryApi {
                 header("Cookie", "JSESSIONID=" + sessionId).
                 body(changePriority.toString()).
                 when().
-                put("/rest/api/2/issue/34249").
+                put("/rest/api/2/issue/"+issueId).
+                //put("/rest/api/2/issue/34249").
                 then().
                 statusCode(204);
 
         String responseBody = response.extract().asString();
     }
+
+    @Test (dependsOnMethods = "updatePriority")
+    public void getIssuePriorityTest() {
+        ValidatableResponse responsegetIssuePriority = given().
+                header("Content-Type", "application/json").
+                header("Cookie", "JSESSIONID=" + sessionId).
+                when().
+                get("/rest/api/2/issue/" + issueId ).
+                then().
+                statusCode(200);
+        Assert.assertEquals(responsegetIssuePriority.extract().path("fields.priority.id"),"1");
+    }
+
+    @AfterTest
+    public void deleteIssueTest() {
+        ValidatableResponse responseDelete = given().
+                header("Content-Type", "application/json").
+                header("Cookie", "JSESSIONID=" + sessionId).
+                when().
+                delete("/rest/api/2/issue/" + issueId).
+                then().
+                statusCode(204).log().all(); //Code 204: Returned if the issue was successfully removed.
+    }
+
 
 
 

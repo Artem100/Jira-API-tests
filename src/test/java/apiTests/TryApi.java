@@ -2,6 +2,7 @@ package apiTests;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
+import json.data.MappperJSON;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
@@ -181,6 +182,7 @@ public class TryApi {
                 statusCode(200);
         Assert.assertEquals(responsegetIssuePriority.extract().path("fields.priority.id"),"1");
     }
+
 
     @AfterTest
     public void deleteIssueTest() {

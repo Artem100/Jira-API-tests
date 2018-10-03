@@ -9,6 +9,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
+import utils.SampleMapper;
 
 import static io.restassured.RestAssured.given;
 
@@ -81,7 +82,7 @@ public class TryApi {
 
     @Test
     public void createIssue(){
-        String fieldProject="QAAUT6";
+        /*String fieldProject="QAAUT6";
         String fieldSummary = "API test4";
         String fieldIssueType = "10105";
         String fieldAssigneeUser = "Artem Stolbtsov";
@@ -99,12 +100,14 @@ public class TryApi {
         fields.put("issuetype", issueType);
         fields.put("assignee",assignee);
         fields.put("summary", fieldSummary);
-        issueCreate.put("fields", fields);
+        issueCreate.put("fields", fields);*/
+
+        SampleMapper sampleMapper = new SampleMapper();
 
         ValidatableResponse response = given().
                 header("Content-Type", "application/json").
                 header("Cookie", "JSESSIONID=" + sessionId).
-                body(issueCreate.toString()).
+                body(SampleMapper).
                 when().
                 post("/rest/api/2/issue").
                 then().

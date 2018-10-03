@@ -107,7 +107,7 @@ public class TryApi {
         ValidatableResponse response = given().
                 header("Content-Type", "application/json").
                 header("Cookie", "JSESSIONID=" + sessionId).
-                body(SampleMapper).
+                body(SampleMapper.testMapper).
                 when().
                 post("/rest/api/2/issue").
                 then().

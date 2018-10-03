@@ -3,6 +3,8 @@ package apiTests;
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import json.data.MappperJSON;
+import json.issues.Fields;
+import json.issues.Issue;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
@@ -102,18 +104,29 @@ public class TryApi {
         fields.put("summary", fieldSummary);
         issueCreate.put("fields", fields);*/
 
-        SampleMapper sampleMapper = new SampleMapper();
+
+
+        Fields fields = new Fields();
+        fields.setAssigne("Artem Stolbtsov");
+        fields.setIssueType("Bug");
+        fields.setProject("QAAUT6");
+        fields.setSummary("Issue summary from the Automation Test");
+
+        System.out.println(fields);
+
+        Issue issue = new Issue(fields);
+
+        System.out.println(issue);
 
         ValidatableResponse response = given().
                 header("Content-Type", "application/json").
                 header("Cookie", "JSESSIONID=" + sessionId).
-                body(SampleMapper.testMapper).
+                //body(issueCreate).
+                body(issue).
                 when().
                 post("/rest/api/2/issue").
                 then().
                 statusCode(201);
-
-        issueId = response.extract().path("id");
 
     }
 
@@ -187,7 +200,7 @@ public class TryApi {
     }
 
 
-    @AfterTest
+    /*@AfterTest
     public void deleteIssueTest() {
         ValidatableResponse responseDelete = given().
                 header("Content-Type", "application/json").
@@ -196,6 +209,6 @@ public class TryApi {
                 delete("/rest/api/2/issue/" + issueId).
                 then().
                 statusCode(204).log().all();
-    }
+    }*/
 
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import json.issues.Fields;
 import json.issues.Issue;
+import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,7 @@ public class MappperJSON {
 
     ObjectMapper mapper = new ObjectMapper();
 
+    @Test
     public void cteateIssue(){
 
         Fields fields = new Fields();
@@ -27,6 +29,8 @@ public class MappperJSON {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
+        System.out.println(issue);
     }
 
 }

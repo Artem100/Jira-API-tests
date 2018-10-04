@@ -1,7 +1,7 @@
 package json.issues;
 
 public class Project implements Pojo{
-    public String id;
+    public String key;
 
-    public Project (String id){this.id=id;}
+    public Project (String key){this.key=key;}
 }

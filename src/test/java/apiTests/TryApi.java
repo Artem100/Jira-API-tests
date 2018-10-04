@@ -107,16 +107,12 @@ public class TryApi {
 
 
         Fields fields = new Fields();
-        fields.setAssigne("Artem Stolbtsov");
-        fields.setIssueType("Bug");
+        fields.setAssigne("webinar5");
+        fields.setIssueType("10105");
         fields.setProject("QAAUT6");
         fields.setSummary("Issue summary from the Automation Test");
 
-        System.out.println(fields);
-
         Issue issue = new Issue(fields);
-
-        System.out.println(issue);
 
         ValidatableResponse response = given().
                 header("Content-Type", "application/json").
@@ -126,6 +122,7 @@ public class TryApi {
                 when().
                 post("/rest/api/2/issue").
                 then().
+                log().all().
                 statusCode(201);
 
     }

@@ -2,12 +2,16 @@ package apiTests;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
+import json.data.MappperJSON;
+import json.issues.Fields;
+import json.issues.Issue;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
+import utils.SampleMapper;
 
 import static io.restassured.RestAssured.given;
 
@@ -80,7 +84,7 @@ public class TryApi {
 
     @Test
     public void createIssue(){
-        String fieldProject="QAAUT6";
+        /*String fieldProject="QAAUT6";
         String fieldSummary = "API test4";
         String fieldIssueType = "10105";
         String fieldAssigneeUser = "Artem Stolbtsov";
@@ -98,18 +102,28 @@ public class TryApi {
         fields.put("issuetype", issueType);
         fields.put("assignee",assignee);
         fields.put("summary", fieldSummary);
-        issueCreate.put("fields", fields);
+        issueCreate.put("fields", fields);*/
+
+
+
+        Fields fields = new Fields();
+        fields.setAssigne("webinar5");
+        fields.setIssueType("10105");
+        fields.setProject("QAAUT6");
+        fields.setSummary("Issue summary from the Automation Test");
+
+        Issue issue = new Issue(fields);
 
         ValidatableResponse response = given().
                 header("Content-Type", "application/json").
                 header("Cookie", "JSESSIONID=" + sessionId).
-                body(issueCreate.toString()).
+                //body(issueCreate).
+                body(issue).
                 when().
                 post("/rest/api/2/issue").
                 then().
+                log().all().
                 statusCode(201);
-
-        issueId = response.extract().path("id");
 
     }
 
@@ -182,7 +196,8 @@ public class TryApi {
         Assert.assertEquals(responsegetIssuePriority.extract().path("fields.priority.id"),"1");
     }
 
-    @AfterTest
+
+    /*@AfterTest
     public void deleteIssueTest() {
         ValidatableResponse responseDelete = given().
                 header("Content-Type", "application/json").
@@ -191,11 +206,6 @@ public class TryApi {
                 delete("/rest/api/2/issue/" + issueId).
                 then().
                 statusCode(204).log().all();
-    }
-
-
-
-
-
+    }*/
 
 }

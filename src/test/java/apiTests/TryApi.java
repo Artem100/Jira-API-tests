@@ -2,41 +2,44 @@ package apiTests;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
-import json.data.MappperJSON;
+import json.issues.AddComment;
 import json.issues.Fields;
 import json.issues.Issue;
+import json.login.Login;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
-import utils.SampleMapper;
 
 import static io.restassured.RestAssured.given;
 
 public class TryApi {
-    String username = "webinar5";
-    String password = "webinar5";
     String sessionId;
     String issueId;
     String commentId;
+
+    public static Login login;
 
     @BeforeSuite
     public void setupMethod(){
         RestAssured.baseURI = "http://jira.hillel.it";
         RestAssured.port = 8080;
-        JSONObject login = new JSONObject();
-        login.put("username",username);
-        login.put("password",password);
+
+        login = new Login();
+        login.setLogin("webinar5");
+        login.setPassword("webinar5");
 
         sessionId = given().
         header("Content-Type", "application/json").
-        body(login.toString()).
+        body(login).
         when().
         post("/rest/auth/1/session").
-        then().
+        then().log().all().statusCode(200).
         extract().path("session.value");
+
+        System.out.println(sessionId);
     }
 
     @Test
@@ -47,20 +50,18 @@ public class TryApi {
                 when().
                 get("rest/api/2/issue/createmeta").
                 then().
+                log().all().
                 statusCode(200);
-
-        String issueKey = response.extract().asString();
     }
 
     @Test
     public void wrongLogin() {
-        JSONObject login = new JSONObject();
-        login.put("username", "blabla");
-        login.put("password", password);
+        login.setLogin("webinar51");
+        login.setPassword("webinar5");
 
         ValidatableResponse responseWrongPass = given().
                 header("Content-Type", "application/json").
-                body(login.toString()).
+                body(login).
                 when().
                 post("/rest/auth/1/session").
                 then().
@@ -69,13 +70,12 @@ public class TryApi {
 
     @Test
     public void wrongPassword() {
-        JSONObject login = new JSONObject();
-        login.put("username", username);
-        login.put("password", "pass");
+        login.setLogin("webinar5");
+        login.setPassword("webinar51");
 
         ValidatableResponse responseWrongPass = given().
                 header("Content-Type", "application/json").
-                body(login.toString()).
+                body(login).
                 when().
                 post("/rest/auth/1/session").
                 then().
@@ -84,27 +84,6 @@ public class TryApi {
 
     @Test
     public void createIssue(){
-        /*String fieldProject="QAAUT6";
-        String fieldSummary = "API test4";
-        String fieldIssueType = "10105";
-        String fieldAssigneeUser = "Artem Stolbtsov";
-
-        JSONObject project = new JSONObject();
-        JSONObject fields = new JSONObject();
-        JSONObject issueType = new JSONObject();
-        JSONObject assignee = new JSONObject();
-        JSONObject issueCreate = new JSONObject();
-
-        project.put("key", fieldProject);
-        issueType.put("id", fieldIssueType);
-        assignee.put("name", fieldAssigneeUser);
-        fields.put("project",project);
-        fields.put("issuetype", issueType);
-        fields.put("assignee",assignee);
-        fields.put("summary", fieldSummary);
-        issueCreate.put("fields", fields);*/
-
-
 
         Fields fields = new Fields();
         fields.setAssigne("webinar5");
@@ -114,36 +93,33 @@ public class TryApi {
 
         Issue issue = new Issue(fields);
 
-        ValidatableResponse response = given().
+        issueId = given().
                 header("Content-Type", "application/json").
                 header("Cookie", "JSESSIONID=" + sessionId).
-                //body(issueCreate).
                 body(issue).
                 when().
                 post("/rest/api/2/issue").
                 then().
                 log().all().
-                statusCode(201);
+                statusCode(201).extract().path("id");
 
     }
 
     @Test(dependsOnMethods = {"createIssue"})
     public void addComment(){
-        JSONObject issueComment = new JSONObject();
 
-        issueComment.put("body", "Added comment use to API");
+        AddComment addComment = new AddComment();
+        addComment.setComment("Added comment use to API");
 
         ValidatableResponse response = given().
                 header("Content-Type", "application/json").
                 header("Cookie", "JSESSIONID=" + sessionId).
-                body(issueComment.toString()).
+                body(addComment).
                 when().
                 post("/rest/api/2/issue/"+issueId+"/comment").
-                //post("/rest/api/2/issue/34249/comment").
-                then().
+                then().log().all().
                 statusCode(201);
 
-        commentId = response.extract().path("id");
         Assert.assertEquals(response.extract().path("body"),"Added comment use to API");
     }
 
@@ -153,12 +129,13 @@ public class TryApi {
                 header("Content-Type", "application/json").
                 header("Cookie", "JSESSIONID=" + sessionId).
                 when().
-                get("/rest/api/2/issue/34249").then().statusCode(200);
+                get("/rest/api/2/issue/"+ issueId).then().statusCode(200);
     }
 
     @Test(dependsOnMethods = {"createIssue"})
     public void updatePriority(){
         //{"update":{"priority":[{"set":{"id":1}}]}}
+
         JSONObject changePriority = new JSONObject();
         JSONObject update =new JSONObject();
         JSONArray priority = new JSONArray();
@@ -197,7 +174,7 @@ public class TryApi {
     }
 
 
-    /*@AfterTest
+    @AfterTest
     public void deleteIssueTest() {
         ValidatableResponse responseDelete = given().
                 header("Content-Type", "application/json").
@@ -206,6 +183,6 @@ public class TryApi {
                 delete("/rest/api/2/issue/" + issueId).
                 then().
                 statusCode(204).log().all();
-    }*/
+    }
 
 }

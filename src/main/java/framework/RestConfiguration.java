@@ -9,6 +9,6 @@ public class RestConfiguration {
     public void configure(){
         RestAssured.baseURI= "http://jira.hillel.it";
         RestAssured.port =8080;
-        //RestAssured.basePath="/people";
+        //RestAssured.basePath="";
     }
 }

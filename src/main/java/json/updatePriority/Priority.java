@@ -3,13 +3,13 @@ package json.updatePriority;
 import json.Pojo;
 
 
+
 public class Priority implements Pojo {
 
-    public SetPriority setPriority;
+    public SetId setId;
 
-    public Priority (SetPriority set)
-    {
-        this.setPriority = set;
-    }
+    public Priority set(String set)
+    { this.setId = new SetId(set);
+        return this;}
 
 }

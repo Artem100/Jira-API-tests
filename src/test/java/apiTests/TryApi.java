@@ -6,6 +6,9 @@ import json.issues.AddComment;
 import json.issues.Fields;
 import json.issues.Issue;
 import json.login.Login;
+import json.updatePriority.Priority;
+import json.updatePriority.SetId;
+import json.updatePriority.UpdateFields;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
@@ -19,8 +22,10 @@ public class TryApi {
     String sessionId;
     String issueId;
     String commentId;
+    String set;
 
     public static Login login;
+
 
     @BeforeSuite
     public void setupMethod(){
@@ -136,7 +141,7 @@ public class TryApi {
     public void updatePriority(){
         //{"update":{"priority":[{"set":{"id":1}}]}}
 
-        JSONObject changePriority = new JSONObject();
+        /*JSONObject changePriority = new JSONObject();
         JSONObject update =new JSONObject();
         JSONArray priority = new JSONArray();
         JSONObject inArray = new JSONObject();
@@ -146,12 +151,25 @@ public class TryApi {
         update.put("priority", priority);
         priority.add(inArray);
         inArray.put("set", set);
-        set.put("id","1");
+        set.put("id","1");*/
+
+        //{"update":{"priority":[{"set":{"id":1}}]}} -  Нe получаeтся записать данный запрос из Pojo
+
+        UpdateFields updateFields;
+        Priority priority;
+
+        priority = new Priority();
+        updateFields = new UpdateFields();
+
+        priority.set("1");
+
+
+
 
         ValidatableResponse response=given().
                 header("Content-Type", "application/json").
                 header("Cookie", "JSESSIONID=" + sessionId).
-                body(changePriority.toString()).
+                body().
                 when().
                 put("/rest/api/2/issue/"+issueId).
                 //put("/rest/api/2/issue/34249").

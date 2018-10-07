@@ -2,6 +2,7 @@ package apiTests;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
+import json.issues.JqlRequest;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.testng.annotations.BeforeSuite;
@@ -13,6 +14,8 @@ public class TryApi2 {
     String username = "webinar5";
     String password = "webinar5";
     String sessionId;
+
+    public static JqlRequest jqlRequest;
 
     @BeforeSuite
     public void setupMethod(){
@@ -33,10 +36,9 @@ public class TryApi2 {
 
     @Test
     public void searchIssueJQL(){
+                jqlRequest = new JqlRequest();
+                jqlRequest.setJqlRequest("project = QAAUT6");
 
-        JSONObject jqlRequest = new JSONObject();
-
-        jqlRequest.put("jql", "project = QAAUT6");
 
         ValidatableResponse responseJQL=given().
                 header("Content-Type", "application/json").

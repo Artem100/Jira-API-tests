@@ -6,9 +6,9 @@ import json.Pojo;
 import java.util.ArrayList;
 
 public class Update implements Pojo {
-    public ArrayList<Object> priority =new ArrayList<Object>();
+    public ArrayList<Priority> priority = new ArrayList<Priority>();
 
-    public Update setPriority(Object set) {
+    public Update setPriority(Priority set) {
         this.priority.add(set);
         return this;
     }

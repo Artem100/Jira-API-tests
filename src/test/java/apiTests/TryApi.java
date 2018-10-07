@@ -8,6 +8,7 @@ import json.issues.Issue;
 import json.login.Login;
 import json.updatePriority.Priority;
 import json.updatePriority.SetId;
+import json.updatePriority.Update;
 import json.updatePriority.UpdateFields;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,6 +16,8 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
+
+import java.util.Set;
 
 import static io.restassured.RestAssured.given;
 
@@ -139,41 +142,22 @@ public class TryApi {
 
     @Test(dependsOnMethods = {"createIssue"})
     public void updatePriority(){
+
         //{"update":{"priority":[{"set":{"id":1}}]}}
 
-        /*JSONObject changePriority = new JSONObject();
-        JSONObject update =new JSONObject();
-        JSONArray priority = new JSONArray();
-        JSONObject inArray = new JSONObject();
-        JSONObject set = new JSONObject();
-
-        changePriority.put("update", update);
-        update.put("priority", priority);
-        priority.add(inArray);
-        inArray.put("set", set);
-        set.put("id","1");*/
-
-        //{"update":{"priority":[{"set":{"id":1}}]}} -  Нe получаeтся записать данный запрос из Pojo
-
-        UpdateFields updateFields;
-        Priority priority;
-
-        priority = new Priority();
-        updateFields = new UpdateFields();
-
+        Priority priority = new Priority();
         priority.set("1");
-
-
-
+        Update update = new Update();
+        update.setPriority(priority);
+        UpdateFields updateFields = new UpdateFields(update);
 
         ValidatableResponse response=given().
                 header("Content-Type", "application/json").
                 header("Cookie", "JSESSIONID=" + sessionId).
-                body().
+                body(updateFields).
                 when().
                 put("/rest/api/2/issue/"+issueId).
-                //put("/rest/api/2/issue/34249").
-                then().
+                then().log().all().
                 statusCode(204);
 
         String responseBody = response.extract().asString();

@@ -5,19 +5,14 @@ import io.restassured.response.ValidatableResponse;
 import json.issues.AddComment;
 import json.issues.Fields;
 import json.issues.Issue;
-import json.login.Login;
+import json.authorization.Authorization;
 import json.updatePriority.Priority;
-import json.updatePriority.SetId;
 import json.updatePriority.Update;
 import json.updatePriority.UpdateFields;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
-
-import java.util.Set;
 
 import static io.restassured.RestAssured.given;
 
@@ -27,7 +22,7 @@ public class TryApi {
     String commentId;
     String set;
 
-    public static Login login;
+    public static Authorization login;
 
 
     @BeforeSuite
@@ -35,9 +30,9 @@ public class TryApi {
         RestAssured.baseURI = "http://jira.hillel.it";
         RestAssured.port = 8080;
 
-        login = new Login();
-        login.setLogin("webinar5");
-        login.setPassword("webinar5");
+        login = new Authorization("webinar5","webinar5");
+        //authorization.setLogin("webinar5");
+        //authorization.setPassword("webinar5");
 
         sessionId = given().
         header("Content-Type", "application/json").
@@ -64,8 +59,7 @@ public class TryApi {
 
     @Test
     public void wrongLogin() {
-        login.setLogin("webinar51");
-        login.setPassword("webinar5");
+        login = new Authorization("webinar15","webinar5");
 
         ValidatableResponse responseWrongPass = given().
                 header("Content-Type", "application/json").
@@ -78,8 +72,7 @@ public class TryApi {
 
     @Test
     public void wrongPassword() {
-        login.setLogin("webinar5");
-        login.setPassword("webinar51");
+        login = new Authorization("webinar5","webinar15");
 
         ValidatableResponse responseWrongPass = given().
                 header("Content-Type", "application/json").

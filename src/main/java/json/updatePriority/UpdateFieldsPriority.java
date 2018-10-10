@@ -4,11 +4,11 @@ import json.Pojo;
 
 import java.util.ArrayList;
 
-public class UpdateFields implements Pojo {
+public class UpdateFieldsPriority implements Pojo {
 
     public Update update;
 
-    public UpdateFields(Update update) {
+    public UpdateFieldsPriority(Update update) {
         this.update = update;
     }
 }

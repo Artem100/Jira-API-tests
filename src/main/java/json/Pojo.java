@@ -1,4 +1,4 @@
-package json.issues;
+package json;
 
 public interface Pojo {
 }

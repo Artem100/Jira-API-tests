@@ -1,14 +1,14 @@
-package apiTests;
+package oldApiTests;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import json.issues.AddComment;
 import json.issues.Fields;
 import json.issues.Issue;
-import json.authorization.Authorization;
+import json.authorization.LoginFields;
 import json.updatePriority.Priority;
 import json.updatePriority.Update;
-import json.updatePriority.UpdateFields;
+import json.updatePriority.UpdateFieldsPriority;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeSuite;
@@ -22,15 +22,15 @@ public class TryApi {
     String commentId;
     String set;
 
-    public static Authorization login;
+    public static LoginFields login;
 
-
+/*
     @BeforeSuite
     public void setupMethod(){
         RestAssured.baseURI = "http://jira.hillel.it";
         RestAssured.port = 8080;
 
-        login = new Authorization("webinar5","webinar5");
+        login = new LoginFields("webinar5","webinar5");
         //authorization.setLogin("webinar5");
         //authorization.setPassword("webinar5");
 
@@ -59,7 +59,7 @@ public class TryApi {
 
     @Test
     public void wrongLogin() {
-        login = new Authorization("webinar15","webinar5");
+        login = new LoginFields("webinar15","webinar5");
 
         ValidatableResponse responseWrongPass = given().
                 header("Content-Type", "application/json").
@@ -72,7 +72,7 @@ public class TryApi {
 
     @Test
     public void wrongPassword() {
-        login = new Authorization("webinar5","webinar15");
+        login = new LoginFields("webinar5","webinar15");
 
         ValidatableResponse responseWrongPass = given().
                 header("Content-Type", "application/json").
@@ -138,11 +138,11 @@ public class TryApi {
 
         //{"update":{"priority":[{"set":{"id":1}}]}}
 
-        Priority priority = new Priority();
+        Priority priority = new Priority("1");
         priority.set("1");
         Update update = new Update();
         update.setPriority(priority);
-        UpdateFields updateFields = new UpdateFields(update);
+        UpdateFieldsPriority updateFields = new UpdateFieldsPriority(update);
 
         ValidatableResponse response=given().
                 header("Content-Type", "application/json").
@@ -179,5 +179,7 @@ public class TryApi {
                 then().
                 statusCode(204).log().all();
     }
+
+    */
 
 }

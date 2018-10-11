@@ -1,8 +1,8 @@
-package apiTests;
+package oldApiTests;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
-import json.authorization.Authorization;
+import json.authorization.LoginFields;
 import json.issues.JqlRequest;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
@@ -12,15 +12,15 @@ import static io.restassured.RestAssured.given;
 public class TryApi2 {
 
     public static JqlRequest jqlRequest;
-    public static Authorization login;
+    public static LoginFields login;
     String sessionId;
-
+/*
     @BeforeSuite
     public void setupMethod(){
         RestAssured.baseURI = "http://jira.hillel.it";
         RestAssured.port = 8080;
 
-        login = new Authorization("webinar5","webinar5");
+        login = new LoginFields("webinar5","webinar5");
 
         sessionId = given().
                 header("Content-Type", "application/json").
@@ -86,5 +86,5 @@ public class TryApi2 {
                 statusCode(200).log().all();
     }
 
-
+*/
 }

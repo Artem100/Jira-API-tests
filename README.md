@@ -19,7 +19,7 @@ $ mvn clean test
 ```
 $ mvn site
 ```
-3.1 Go to directory with reported (/target/site/allure-maven.html) and open it browser.
-
+3.1 Go to directory with results report (/target/site/allure-maven.html) and open it in browser.
+![Allure report](https://prnt.sc/mhlgnn)
 
 [![CircleCI](https://circleci.com/gh/Artem100/LR20.svg?style=svg)](https://circleci.com/gh/Artem100/LR20)

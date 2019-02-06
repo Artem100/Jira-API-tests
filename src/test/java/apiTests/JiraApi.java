@@ -15,9 +15,14 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
+import java.util.ResourceBundle;
+
 public class JiraApi {
+
     String project="QAAUT6";
     String issueId;
+    private static ResourceBundle credentials = ResourceBundle.getBundle("credentials");
+
 
 
     @BeforeSuite
@@ -25,21 +30,24 @@ public class JiraApi {
 
     @Test
     public void loginPositive(){
-        LoginFields login = JSONFixture.loginToJira("webinar5", "webinar5");
+        LoginFields login = JSONFixture.loginToJira((credentials.getString("username")),
+                (credentials.getString("username")));
         ValidatableResponse requestLogin = JiraAPIActions.login(login);
         Assert.assertEquals(requestLogin.extract().statusCode(), 200);
     }
 
     @Test
     public void wrongLogin(){
-        LoginFields login = JSONFixture.loginToJira("webinar51", "webinar5");
+        LoginFields login = JSONFixture.loginToJira((credentials.getString("incorrectUsername")),
+                (credentials.getString("password")));
         ValidatableResponse requestLogin = JiraAPIActions.login(login);
         Assert.assertEquals(requestLogin.extract().statusCode(), 401);
     }
 
     @Test
     public void wrongPassword(){
-        LoginFields login = JSONFixture.loginToJira("webinar5", "webinar51");
+        LoginFields login = JSONFixture.loginToJira((credentials.getString("username")),
+                (credentials.getString("incorrectPassword")));
         ValidatableResponse requestLogin = JiraAPIActions.login(login);
         Assert.assertEquals(requestLogin.extract().statusCode(), 401);
     }
@@ -120,7 +128,7 @@ public class JiraApi {
 
     }
 
-    @AfterTest
+    /*@AfterTest
     public void deleteIssue(){
         ValidatableResponse responseDeleteIssue = JiraAPIActions.deleteIssue(issueId).log().all();
         Assert.assertEquals(responseDeleteIssue.extract().statusCode(), 204);
@@ -130,7 +138,7 @@ public class JiraApi {
     public void checkDeletedIssue(){
         ValidatableResponse responseDeletedIssue = JiraAPIActions.deleteIssue(issueId);
         Assert.assertEquals(responseDeletedIssue.extract().statusCode(), 404);
-    }
+    }*/
 
 
 }

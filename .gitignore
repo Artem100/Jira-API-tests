@@ -30,5 +30,7 @@ hs_err_pid*
 
 # Maven 
 target/
-
 build/
+
+#Allure
+.allure/

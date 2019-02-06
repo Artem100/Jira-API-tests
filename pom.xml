@@ -10,26 +10,43 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <testng.version>6.14.3</testng.version>
+        <selenium-java.version>3.14.0</selenium-java.version>
+        <aspectj.version>1.8.9</aspectj.version>
+        <maven-surefire.version>2.22.1</maven-surefire.version>
+        <allure-testng.version>1.5.4</allure-testng.version>
+        <allure-maven.version>2.8</allure-maven.version>
+        <allure-maven.reportVersion>2.3.1</allure-maven.reportVersion>
+        <rest-assured.version>3.1.1</rest-assured.version>
+        <json-path.version>3.1.1</json-path.version>
+        <json-simple.version>1.1</json-simple.version>
+        <json.version>20180813</json.version>
+        <jackson-databind.version>2.9.1</jackson-databind.version>
+        <jackson-annotations.version>2.9.7</jackson-annotations.version>
     </properties>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.18.1</version>
+                <version>${maven-surefire.version}</version>
                 <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
@@ -40,68 +57,76 @@
     <dependency>
         <groupId>io.rest-assured</groupId>
         <artifactId>rest-assured</artifactId>
-        <version>3.1.1</version>
-        <scope>test</scope>
-    </dependency>
-
-    <dependency>
-        <groupId>io.rest-assured</groupId>
-        <artifactId>json-path</artifactId>
-        <version>3.1.1</version>
-    </dependency>
-
-    <dependency>
-        <groupId>org.testng</groupId>
-        <artifactId>testng</artifactId>
-        <version>6.14.3</version>
-        <scope>test</scope>
-    </dependency>
-
-    <dependency>
-        <groupId>org.testng</groupId>
-        <artifactId>testng</artifactId>
-        <version>RELEASE</version>
+        <version>${rest-assured.version}</version>
         <scope>compile</scope>
     </dependency>
 
     <dependency>
         <groupId>io.rest-assured</groupId>
-        <artifactId>rest-assured</artifactId>
-        <version>RELEASE</version>
+        <artifactId>json-path</artifactId>
+        <version>${json-path.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.testng</groupId>
+        <artifactId>testng</artifactId>
+        <version>${testng.version}</version>
         <scope>compile</scope>
     </dependency>
 
     <dependency>
         <groupId>com.googlecode.json-simple</groupId>
         <artifactId>json-simple</artifactId>
-        <version>1.1</version>
+        <version>${json-simple.version}</version>
+        <scope>compile</scope>
     </dependency>
 
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20180813</version>
+            <version>${json.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.1</version>
-            <scope>test</scope>
+            <version>${jackson-databind.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.9.7</version>
+            <version>${jackson-annotations.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
+            <groupId>ru.yandex.qatools.allure</groupId>
+            <artifactId>allure-testng-adaptor</artifactId>
+            <version>${allure-testng.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>
+
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>${allure-maven.version}</version>
+                <configuration>
+                    <reportVersion>${allure-maven.reportVersion}</reportVersion>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
 
 </project>

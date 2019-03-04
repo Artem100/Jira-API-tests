@@ -9,6 +9,8 @@ import json.updatePriority.UpdateFieldsPriority;
 
 public class JiraAPIActions {
 
+    // Repeated actions in tests
+
     public static ValidatableResponse login (LoginFields loginFields){
         return HTTPRequestSender.post(JiraPath.pageLogin, loginFields);
     }

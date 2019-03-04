@@ -13,6 +13,8 @@ import json.updatePriority.UpdateFieldsPriority;
 
 public class JSONFixture {
 
+    //Class for generation data of json fields
+
     public static CreateIssue createDefaultIssue(String project, String summary, String typeIssue, String assignee){
 
         Fields fields = new Fields();

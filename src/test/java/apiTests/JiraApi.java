@@ -128,7 +128,7 @@ public class JiraApi {
 
     }
 
-    /*@AfterTest
+    @AfterTest
     public void deleteIssue(){
         ValidatableResponse responseDeleteIssue = JiraAPIActions.deleteIssue(issueId).log().all();
         Assert.assertEquals(responseDeleteIssue.extract().statusCode(), 204);
@@ -138,7 +138,7 @@ public class JiraApi {
     public void checkDeletedIssue(){
         ValidatableResponse responseDeletedIssue = JiraAPIActions.deleteIssue(issueId);
         Assert.assertEquals(responseDeletedIssue.extract().statusCode(), 404);
-    }*/
+    }
 
 
 }

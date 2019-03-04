@@ -7,6 +7,8 @@ import json.authorization.LoginFields;
 
 import static io.restassured.RestAssured.given;
 
+// Class with API Methods
+
 public class HTTPRequestSender {
 
     public static ValidatableResponse get(String path) {
